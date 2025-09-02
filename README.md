@@ -91,14 +91,6 @@ set OPENROUTER_API_KEY=sk-or-v1-your-key-here
 export OPENROUTER_API_KEY=sk-or-v1-your-key-here
 ```
 
-## DeepSeek v3.1 Special Features
-
-The proxy automatically handles DeepSeek's weird reasoning modes:
-
-### Via OpenRouter
-- Sends both `include_reasoning: true` AND `reasoning: {effort: 'high'}`
-- Works with the unified `deepseek/deepseek-chat-v3.1` model
-
 ## Troubleshooting
 
 ### "No API key" error
@@ -110,12 +102,13 @@ The proxy automatically handles DeepSeek's weird reasoning modes:
 - Check the URL is exactly as shown in the proxy output
 
 ### Model not thinking when it should
-- Custom endpoints: Check your model selection - some APIs require specific models for thinking
-- Models like Nouse Hermes 4 require a start string request of `<think>`.
+- Custom endpoints: Check your model selection - some APIs require specific models for thinking. If the model doesn't support reasoning, OR will pass the request with the header ignored.
+- Models like Nouse Hermes 4 require initiating a `<think>` request.
 (Note that Chub.ai strips `<think>` / `</think>` and `reasoning` headers)
 
 ### Want to see what's happening?
-The proxy logs every request with full details for debugging.
+The proxy logs every request with full details for debugging. Set `debug=False` to disable payload view.
+  - `app.run(host='127.0.0.1', port=PROXY_PORT, debug=True)`
 
 ## Advanced Features
 
