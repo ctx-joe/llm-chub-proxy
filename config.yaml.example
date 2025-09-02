@@ -1,0 +1,98 @@
+# Chub.ai Smart Proxy Configuration
+# Copy this file to 'config.yaml' and add your API keys
+
+# Default profile to use when no profile is specified in the URL
+default_profile: openrouter
+
+# Profile definitions - each profile is a different endpoint configuration
+profiles:
+  # OpenRouter - Works with all models they support
+  openrouter:
+    name: OpenRouter (All Models)
+    base_url: https://openrouter.ai/api/v1
+    
+    # Set your OpenRouter API key here or use environment variable
+    # Get your key at: https://openrouter.ai/keys
+    api_key: ${OPENROUTER_API_KEY}  # or paste your key directly: sk-or-v1-xxxxx
+    
+    headers:
+      HTTP-Referer: http://localhost:8080
+      X-Title: Chub.ai Proxy
+    
+    # OpenRouter reasoning parameters - sent with all requests
+    # OpenRouter applies these automatically to compatible models
+    reasoning:
+      enabled: true      # Enable reasoning for compatible models
+      effort: high       # Can be: high, medium, or low
+      exclude: false     # Set to true to exclude reasoning from output
+
+  # DeepSeek Direct API (cheaper but requires manual model selection)
+  deepseek-direct:
+    name: DeepSeek Direct API
+    base_url: https://api.deepseek.com/v1
+    
+    # Get your key at: https://platform.deepseek.com/api_keys
+    api_key: ${DEEPSEEK_API_KEY}  # or paste directly: sk-xxxxx
+    
+    headers: {}
+    
+    # Note: You must manually select the correct model in Chub:
+    # - deepseek-chat: Regular chat (no thinking)
+    # - deepseek-reasoner: Thinking mode
+
+  # Moonshot AI (Kimi)
+  moonshot:
+    name: Moonshot API
+    base_url: https://api.moonshot.ai/v1
+    
+    # Get your key at: https://platform.moonshot.ai/console/api-keys
+    api_key: ${MOONSHOT_API_KEY}  # or paste directly: sk-xxxxx
+    
+    headers: {}
+
+  # Mistral AI
+  mistral:
+    name: Mistral API
+    base_url: https://api.mistral.ai/v1
+    
+    # Get your key at: https://console.mistral.ai/api-keys
+    api_key: ${MISTRAL_API_KEY}  # or paste directly: xxxxx
+    
+    headers: {}
+
+  # Template for adding your own endpoints - copy and modify!
+  # 
+  # my-custom-api:
+  #   name: My Custom API
+  #   base_url: https://api.example.com/v1
+  #   api_key: ${MY_API_KEY}  # Use environment variable or paste directly
+  #   
+  #   # Add ALL headers your API needs - they all get sent!
+  #   headers:
+  #     X-Custom-Header: custom-value
+  #     Another-Header: another-value
+  #     X-API-Version: 2024-01-01
+  #     X-Required-Field: whatever-you-need
+  #   
+  #   # Optional: Force a specific model regardless of what's requested
+  #   # force_model: my-specific-model
+  #   
+  #   # Optional: Rename models on the fly
+  #   # model_map:
+  #   #   gpt-4o: my-gpt4-equivalent
+  #   #   gpt-5-chat: my-fast-model
+  #   
+  #   # Optional: Add reasoning parameters (OpenRouter will apply to compatible models)
+  #   # reasoning:
+  #   #   enabled: true
+  #   #   effort: high    # or medium, low
+  #   #   exclude: false  # true to hide reasoning from output
+  # 
+  # Access at: http://localhost:8080/my-custom-api/
+
+# Tips:
+# 1. You can use environment variables with ${VAR_NAME} syntax
+# 2. Or paste API keys directly (less secure but easier)
+# 3. Each profile gets its own URL: http://localhost:8080/[profile-name]/
+# 4. Chub will append paths like 'models' or 'chat/completions' automatically
+# 5. Test your setup with: curl http://localhost:8080/openrouter/models
